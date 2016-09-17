@@ -5,10 +5,16 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 
+if [ "$1" == "openalpr-link" ]; then
+    # Say nothing
+    exit 0
+fi
+
 if [ "$1" != "openalpr-daemon" ]; then
     echo "This override is only valid for openalpr-daemon service"
     exit 1
 fi
+
 
 # They are trying to restart openalpr-daemon with the service command.  Redirect this to supervisorctl
 supervisorctl $2 alprd
