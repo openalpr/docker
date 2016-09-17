@@ -29,6 +29,9 @@ VOLUME /usr/share/openalpr/
 
 WORKDIR ~/
 
+# Override script for "service" to allow alprlink to restart service
+COPY service-override /usr/sbin/service
+
 # Startup script for OpenALPR services
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 

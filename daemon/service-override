@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ "$#" -ne 2 ]; then
+    echo "You must enter exactly 2 command line arguments"
+    exit 1
+fi
+
+if [ "$1" != "openalpr-daemon" ]; then
+    echo "This override is only valid for openalpr-daemon service"
+    exit 1
+fi
+
+# They are trying to restart openalpr-daemon with the service command.  Redirect this to supervisorctl
+supervisorctl $2 alprd
+
