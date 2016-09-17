@@ -25,7 +25,7 @@ EXPOSE 11300 8355
 # Allow the plate images to be persisted on the host
 VOLUME /var/lib/openalpr/plateimages/
 VOLUME /etc/openalpr/
-VOLUME /usr/share/openalpr/
+VOLUME /usr/share/openalpr/install_id
 
 WORKDIR ~/
 
