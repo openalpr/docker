@@ -16,6 +16,13 @@ RUN apt-get update && apt-get install -y \
     openalpr-daemon \
     openalpr-link 
 
+# Pull the alprlc package from the beta repo.  This will not be necessary once it's promoted to ga
+# This is avoids having an extra volume mount for the install_id (beta alprlc moves it to /etc/openalpr/)
+RUN echo "deb http://deb.openalpr.com/commercial-beta/ trusty main" > /etc/apt/sources.list.d/openalpr.list && \
+    apt-get update && apt-get install -y \
+        libalprlc2  && \
+    echo "deb http://deb.openalpr.com/commercial/ trusty main" > /etc/apt/sources.list.d/openalpr.list
+
 # Adjust beanstalkd to also allow remote connections
 RUN sed -i 's/BEANSTALKD_LISTEN_ADDR\s*=\s*127.0.0.1/BEANSTALKD_LISTEN_ADDR=0.0.0.0/' /etc/default/beanstalkd
 
@@ -23,9 +30,8 @@ RUN sed -i 's/BEANSTALKD_LISTEN_ADDR\s*=\s*127.0.0.1/BEANSTALKD_LISTEN_ADDR=0.0.
 EXPOSE 11300 8355
 
 # Allow the plate images to be persisted on the host
-VOLUME /var/lib/openalpr/plateimages/
+VOLUME /var/lib/openalpr/
 VOLUME /etc/openalpr/
-VOLUME /usr/share/openalpr/
 
 WORKDIR ~/
 
