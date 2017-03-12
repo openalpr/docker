@@ -1,27 +1,18 @@
 FROM ubuntu:14.04
 MAINTAINER Matt Hill <matthill@openalpr.com>
 
-RUN apt-get update && \
-    apt-get install -y \
-    supervisor \
-    wget 
 
 # Setup gpg key and deb repo
-RUN wget -O - http://deb.openalpr.com/openalpr.gpg.key | sudo apt-key add - && \
-    echo "deb http://deb.openalpr.com/commercial/ trusty main" | sudo tee /etc/apt/sources.list.d/openalpr.list
+RUN apt-get update && apt-get install -y wget && \
+    wget -O - http://deb.openalpr.com/openalpr.gpg.key | sudo apt-key add - && \
+    echo "deb http://deb.openalpr.com/commercial/ trusty main" | sudo tee /etc/apt/sources.list.d/openalpr.list && \
+	apt-get update && apt-get install -y \
+      openalpr \
+      openalpr-daemon \
+      openalpr-link \
+      supervisor && \
+      rm -rf /var/lib/apt/lists/*
 
-# Install the software
-RUN apt-get update && apt-get install -y \
-    openalpr \
-    openalpr-daemon \
-    openalpr-link 
-
-# Pull the alprlc package from the beta repo.  This will not be necessary once it's promoted to ga
-# This is avoids having an extra volume mount for the install_id (beta alprlc moves it to /etc/openalpr/)
-RUN echo "deb http://deb.openalpr.com/commercial-beta/ trusty main" > /etc/apt/sources.list.d/openalpr.list && \
-    apt-get update && apt-get install -y \
-        libalprlc2  && \
-    echo "deb http://deb.openalpr.com/commercial/ trusty main" > /etc/apt/sources.list.d/openalpr.list
 
 # Adjust beanstalkd to also allow remote connections
 RUN sed -i 's/BEANSTALKD_LISTEN_ADDR\s*=\s*127.0.0.1/BEANSTALKD_LISTEN_ADDR=0.0.0.0/' /etc/default/beanstalkd
