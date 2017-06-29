@@ -1,11 +1,11 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Matt Hill <matthill@openalpr.com>
 
 
 # Setup gpg key and deb repo
 RUN apt-get update && apt-get install -y wget && \
-    wget -O - http://deb.openalpr.com/openalpr.gpg.key | sudo apt-key add - && \
-    echo "deb http://deb.openalpr.com/commercial/ trusty main" | sudo tee /etc/apt/sources.list.d/openalpr.list && \
+    wget -qO - http://deb.openalpr.com/openalpr.gpg.key | apt-key add - && \
+    echo "deb http://deb.openalpr.com/xenial-commercial/ xenial main" > /etc/apt/sources.list.d/openalpr.list && \
 	apt-get update && apt-get install -y \
       openalpr \
       openalpr-daemon \
