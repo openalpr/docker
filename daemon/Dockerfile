@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y wget && \
       openalpr-daemon \
       openalpr-link \
       supervisor && \
+      touch /usr/share/openalpr/is_docker && \
       rm -rf /var/lib/apt/lists/*
 
 
@@ -27,7 +28,7 @@ VOLUME /etc/openalpr/
 WORKDIR ~/
 
 # Override script for "service" to allow alprlink to restart service
-COPY service-override /usr/sbin/service
+COPY service-override /bin/systemctl
 
 # Startup script for OpenALPR services
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
