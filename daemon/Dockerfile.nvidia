@@ -5,7 +5,7 @@ MAINTAINER Matt Hill <matthill@openalpr.com>
 # Setup gpg key and deb repo
 RUN apt-get update && apt-get install -y wget && \
     wget -qO - http://deb.openalpr.com/openalpr.gpg.key | apt-key add - && \
-    echo "deb http://deb.openalpr.com/xenial-commercial-beta/ xenial main" > /etc/apt/sources.list.d/openalpr.list && \
+    echo "deb http://deb.openalpr.com/xenial-commercial/ xenial main" > /etc/apt/sources.list.d/openalpr.list && \
 	apt-get update && apt-get install -y \
       openalpr \
       openalprgpu \
