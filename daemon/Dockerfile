@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y wget && \
       openalpr \
       openalpr-daemon \
       openalpr-link \
+      python-openalpr \
       supervisor && \
       touch /usr/share/openalpr/is_docker && \
       rm -rf /var/lib/apt/lists/*
