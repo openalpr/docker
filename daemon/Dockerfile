@@ -1,15 +1,17 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER Matt Hill <matthill@openalpr.com>
 
 
 # Setup gpg key and deb repo
-RUN apt-get update && apt-get install -y wget && \
-    wget -qO - http://deb.openalpr.com/openalpr.gpg.key | apt-key add - && \
-    echo "deb http://deb.openalpr.com/xenial-commercial/ xenial main" > /etc/apt/sources.list.d/openalpr.list && \
+RUN apt-get update && apt-get install -y curl gnupg && \
+    curl -sSL http://deb.openalpr.com/openalpr.gpg.key | apt-key add - && \
+    echo "deb http://deb.openalpr.com/bionic/ bionic main" > /etc/apt/sources.list.d/openalpr.list && \
 	apt-get update && apt-get install -y \
+      libalprstream-dev \
       openalpr \
       openalpr-daemon \
       openalpr-link \
+      python-alprstream \
       python-openalpr \
       supervisor && \
       touch /usr/share/openalpr/is_docker && \
@@ -39,3 +41,5 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY alprd.conf /etc/openalpr/alprd.conf
 
 CMD ["/usr/bin/supervisord"]
+
+
