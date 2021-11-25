@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 
 import json
 import tornado.ioloop
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     debug = options.debug
 
     if options.threads > multiprocessing.cpu_count():
-        print "Warning, attempting to use %d threads when your system only has %d cores" % (options.threads, multiprocessing.cpu_count())
+        print("Warning, attempting to use %d threads when your system only has %d cores" % (options.threads, multiprocessing.cpu_count()))
 
     executor = ThreadPoolExecutor(options.threads)
 
@@ -94,7 +94,7 @@ class AlprHandler(tornado.web.RequestHandler):
 
         end = time.clock()
         if debug:
-            print "Total POST time: %.2f ms" % ((end - start) * 1000)
+            print("Total POST time: %.2f ms" % ((end - start) * 1000))
 
         self.finish(json.dumps(alpr_results))
 
@@ -105,7 +105,7 @@ class AlprHandler(tornado.web.RequestHandler):
 
         if thread_id not in self.alpr_processes:
             if debug:
-                print "Kicking off new ALPR process"
+                print("Kicking off new ALPR process")
             self.alpr_processes[thread_id] = Alpr("us", "/etc/openalpr/openalpr.conf", "/usr/share/openalpr/runtime_data")
             self.alpr_processes[thread_id].set_detect_region(True)
 
@@ -114,18 +114,18 @@ class AlprHandler(tornado.web.RequestHandler):
             self.alpr_processes[thread_id].set_default_region(state)
 
         if debug:
-            print "Starting alpr job"
-            print "back-queue size: %d" % executor._work_queue.qsize(),
+            print("Starting alpr job")
+            print("back-queue size: %d" % executor._work_queue.qsize(), end="")
 
-            print "args: topn %d, state: %s" % (topn, state)
-            print "Thread ID: " + str (threading.currentThread().ident)
+            print("args: topn %d, state: %s" % (topn, state))
+            print("Thread ID: " + str (threading.currentThread().ident))
         try:
             start = time.clock()
             results = self.alpr_processes[thread_id].recognize_array(image)
             end = time.clock()
 
             if debug:
-                print "ALPR Processing time: %.2f ms" % ((end - start) * 1000)
+                print("ALPR Processing time: %.2f ms" % ((end - start) * 1000))
             return results
         except:
             return {'error': 'alpr_processing_error'}
@@ -160,8 +160,7 @@ application = tornado.web.Application([
 
 if __name__ == "__main__":
 
-    print "OpenALPR Web server started on port %d" % (options.port)
-    print "Using %d parallel ALPR threads" % (options.threads)
+    print("OpenALPR Web server started on port %d" % (options.port))
+    print("Using %d parallel ALPR threads" % (options.threads))
     application.listen(options.port)
     tornado.ioloop.IOLoop.current().start()
-
